@@ -1,0 +1,23 @@
+{
+  "name": "serversidejs",
+  "version": "1.0.0",
+  "description": "Szerver oldali JavaSrcipt házifeladt",
+  "main": "index.js",
+  "scripts": { 
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balazskvancz/serversidejs.git"
+  },
+  "author": "D6YXG8",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/balazskvancz/serversidejs/issues"
+  },
+  "homepage": "https://github.com/balazskvancz/serversidejs#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
