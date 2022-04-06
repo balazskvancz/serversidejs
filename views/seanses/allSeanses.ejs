@@ -1,0 +1,60 @@
+<%- include('../partials/header') -%>
+
+<%- include('../navbar/navbar') -%>
+<div class="container-fluid">
+  <div class="container mx-auto p-4 m-4">
+    <div class="card">
+
+      <div class="card-header position-relative">
+        <h1 class="text-center p-2 ">Áttekintés</h1>
+
+        <a href="/seans/new">
+          <button class="btn btn-secondary btn-lg shadow-none">Új szeánsz <i class="bi bi-plus-circle-fill"></i></button>
+        </a>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center align-middle">Dátum</th>
+                <th class="text-center align-middle">Teák</th>
+                <th class="text-center align-middle">Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% seanses.forEach((seans) => { %>
+              <tr>
+                <td class="text-center align-middle w-25">
+                  <%= seans.date %> 
+                </td>
+                <td class="text-center align-middle w-50">
+                 <div class="col-sm-12 col-md-6 mx-auto">
+                  <ul class="list-group">
+                    <% seans.teas.forEach((tea) => { %>
+                      <li class="list-group-item"><%= tea.name %></li>
+                    <% }) %>
+                  </ul>
+                 </div> 
+                </td>
+                <td class="text-center align-middle w-25">
+                  <a href="/seans/<%=seans.seansId %>/edit" class="text-dark">
+                    <% seans.seansId %>
+                    <i class="bi bi-pencil-square m-2 display-6"></i>
+                  </a>
+                  <i class="bi bi-trash m-2 display-6"></i>
+                </td>
+              </tr>
+
+              <% }) %>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') -%>

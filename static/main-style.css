@@ -7,6 +7,10 @@ body {
     background-color: #e2e8f0;
 }
 
+a {
+    text-decoration: none;
+}
+
 nav, .card-header{
     background-color: #C4C4C4;
 }
@@ -27,4 +31,30 @@ nav, .card-header{
     font-size: 1.5rem;
     letter-spacing: 0.7rem;
     margin-right: 10px;
+}
+
+#auth {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 23px;
+    box-shadow: 0 7px 29px 0 hsl(240deg 5% 41% / 20%);
+    padding: 10px;
+    width: 390px;
+}
+
+#loginBtn {
+    background: #020024;
+    background: linear-gradient(
+61deg
+,#020024 13%,#080769 88%,#090979 100%,#00d4ff 0);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 10px auto;
+    padding: 10px;
+    width: 100%;
 }
