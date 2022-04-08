@@ -1,0 +1,43 @@
+<%- include('../partials/header') -%>
+
+<%- include('../navbar/navbar') -%>
+<div class="container-fluid">
+  <div class="container mx-auto p-4 m-4">
+    <div class="card">
+
+      <div class="card-header">
+        <h2 class="text-center p-2">Új tea felvétele</h2>
+      </div>
+
+      <form action="" method="post" class="card-body">
+
+        <div class="row">
+          <div class="col-sm-12 col-md-6 mx-auto form-group p-2">
+            <% if (typeof error !== 'undefined') { %>
+              <span class="text-danger"><%= error %></span>
+            <% } %>
+            <label class="fw-bold">Tea megnevezés</label>
+            <input type="text" name="tea_name" class="form-control">
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <hr class="my-3">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-6 mx-auto p-2 text-center">
+            <button class="btn btn-success shadow-none" type="submit">Hozzáadás</button>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') -%>
+

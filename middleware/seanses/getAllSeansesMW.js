@@ -9,14 +9,14 @@ module.exports = () => {
       { seansId: 1, 
         date: '2022-03-21', 
         teas: [
-          { name: 'Valami1' },
-          { name: 'Valami2' },
-          { name: 'Valami3' },
+          { name: 'Yiwu #1' },
+          { name: 'Da xue shn' },
+          { name: 'Milky Oolong' },
       ]},
       { seansId: 2, 
         date: '2022-04-21',
         teas: [
-          { name: 'VALMI' }
+          { name: 'Milky Oolong' }
       ]}
     ]
 

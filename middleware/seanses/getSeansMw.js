@@ -10,10 +10,8 @@ module.exports = () => {
       seansId: seansId,
       date: '2022-03-01',
       teas: [
-        { name: 'Valami1' },
-        { name: 'Valami2' },
-        { name: 'Valami3' },
-
+        { name: 'Tie Guan yin' },
+        { name: 'Da Xue shan' },
       ]
     }
 

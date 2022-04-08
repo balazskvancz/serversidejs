@@ -1,18 +1,7 @@
-// CHANGELOG
-//
-// Az általam megírt specifikációhoz képest, annyi módosítást hoztam be, 
-// hogy egyes műveletek, route-ok elérését, bejelentkezéshez kötöttem. 
-// A bejelentkezés magával hozza a regisztrációt is.
-//
-// A helyzet még annyiban módosul, hogy minden user csak a saját szeánszait
-// láthatja, módosítja és törölheti.
-//
-// (Remélem, ez nem probléma.)
-// 
-
 const auth            = require('../middleware/auth/authMW')
 const login           = require('../middleware/auth/loginMW')
 const register        = require('../middleware/auth/registerMW')
+const logout          = require('../middleware/auth/logoutMW')
 
 const addSeans        = require('../middleware/seanses/addSeansMW')
 const allSeanses      = require('../middleware/seanses/getAllSeansesMW')
@@ -28,9 +17,7 @@ const getTea          = require('../middleware/teas/getTeaMW')
 
 const renderMW        = require('../middleware/renderMW')
 
-// const authMW = require('../middleware/auth/authMW')
-
-module.exports = function(app) {
+module.exports = (app) => {
 
   /**
    * Megjeleníti a regisztrációs nézetet.
@@ -45,7 +32,8 @@ module.exports = function(app) {
    */
   app.post(
     '/register',
-    register()
+    register(),
+    renderMW('register')
   )
 
   /**
@@ -60,8 +48,17 @@ module.exports = function(app) {
    * Bejelentkezteti a user-t.
    */
   app.post(
-    '/',
-    login()
+    '/login',
+    login(),
+    renderMW('login')
+  )
+
+  /**
+   * Kijelentkezteti a felhasználót.
+   */
+  app.get(
+    '/logout', 
+    logout()
   )
   
 
@@ -72,8 +69,8 @@ module.exports = function(app) {
    */
   app.get(
     '/seans/all',
-    allSeanses(),
     auth(),
+    allSeanses(),
     renderMW('allSeanses')
   );
 
@@ -91,8 +88,9 @@ module.exports = function(app) {
    */
   app.post(
     '/seans/new',
+    auth(),
     addSeans(),
-    auth()
+    renderMW('newSeans')
   )
 
   /**
@@ -100,8 +98,8 @@ module.exports = function(app) {
    */
   app.get(
     '/seans/:seansid/edit',
-    getSeans(),
     auth(),
+    getSeans(),
     renderMW('editSeans')
   )
 
@@ -111,18 +109,18 @@ module.exports = function(app) {
    */
   app.post(
     '/seans/:seansid/edit',
+    auth(),
     editSeans(),
-    auth()
   )
   
 
   /**
    * Egy szeánsz törlése.
    */
-  app.post(
+  app.get(
     '/seans/:seansid/delete',
+    auth(),
     deleteSeans(),
-    auth()
   )
 
   /* TEÁK */
@@ -132,8 +130,9 @@ module.exports = function(app) {
    */
   app.get(
     '/tea/all',
+    auth(),
     allTeas(),
-    auth()
+    renderMW('allTeas')
   )
 
   /**
@@ -141,8 +140,8 @@ module.exports = function(app) {
    */
   app.get(
     '/tea/:teaid',
+    auth(),
     getTea(),
-    auth()
   )
 
   /**
@@ -150,7 +149,8 @@ module.exports = function(app) {
    */
   app.get(
     '/tea/new',
-    auth()
+    auth(),
+    renderMW('newTea') 
   )
 
   /**
@@ -158,8 +158,9 @@ module.exports = function(app) {
    */
   app.post(
     '/tea/new',
+    auth(),
     addTea(),
-    auth()
+    renderMW('newTea')
   )
 
   /**
@@ -167,8 +168,9 @@ module.exports = function(app) {
    */
   app.get(
     '/tea/:teaid/edit',
+    auth(),
     getTea(),
-    auth()
+    renderMW('editTea')
   )
 
   /**
@@ -176,8 +178,10 @@ module.exports = function(app) {
    */
   app.post(
     '/tea/:teaid/edit',
-    editTea(),
     auth(),
+    editTea(),
+    getTea(),
+    renderMW('editTea')
   )
 
   /**
@@ -185,9 +189,7 @@ module.exports = function(app) {
    */
   app.get(
     '/tea/:teaid/delete',
+    auth(),
     deleteTea(),
-    auth()
   )
-
-
 }
