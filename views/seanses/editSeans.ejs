@@ -13,7 +13,7 @@
         <div class="row">
           <div class="col-sm-12 text-center">
 
-            <h2 class="p-2">Azonosító: <%= seans.seansId%></h2>
+            <h2 class="p-2">Azonosító: <%= seans._id%></h2>
             <h2 class="p-2">Dátum: <%= seans.date %></h2>
 
             <hr class="my-3">
@@ -34,14 +34,15 @@
                 </thead>
 
                 <tbody>
-                  <% seans.teas.forEach((tea) => { %>
+                  <% seans._teas.forEach((tea) => { %>
                     <tr>
-                      <td class="text-center align-middle"><%= tea.name %></td>
+                      <td class="text-center align-middle"><%= tea%></td>
                       <td class="text-center align-middle">
                         <i class="bi bi-trash display-6"></i>
                       </td>
                     </tr> 
                   <% }) %>
+
                 </tbody>
               </table>
             </div>

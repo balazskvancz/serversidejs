@@ -32,17 +32,17 @@
                 <td class="text-center align-middle w-50">
                  <div class="col-sm-12 col-md-6 mx-auto">
                   <ul class="list-group">
-                    <% seans.teas.forEach((tea) => { %>
-                      <li class="list-group-item"><%= tea.name %></li>
+                    <% seans._teas.forEach((tea) => { %>
+                      <li class="list-group-item"><%= tea%></li>
                     <% }) %>
                   </ul>
                  </div> 
                 </td>
                 <td class="text-center align-middle w-25">
-                  <a href="/seans/<%=seans.seansId %>/edit" class="text-dark">
+                  <a href="/seans/<%=seans._id%>/edit" class="text-dark">
                     <i class="bi bi-pencil-square m-2 display-6"></i>
                   </a>
-                  <a href="/seans/<%=seans.seansId %>/delete" class="text-dark">
+                  <a href="/seans/<%=seans._id%>/delete" class="text-dark">
                     <i class="bi bi-trash m-2 display-6"></i>
                   </a>
                 </td>

@@ -6,7 +6,7 @@ const seansModel = db.model('seanses', {
     type: String
   },
   _teas: {
-      type: db.Schema.Types.ObjectId,
+      type: [db.Schema.Types.ObjectId],
       ref: 'teas'
     },
   _owner: {

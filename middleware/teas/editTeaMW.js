@@ -8,7 +8,7 @@ module.exports = (models) => {
     const { teaid } = req.params
 
     // Ha nem szám, akkor akkor irányítsuk a login-ra. 
-    if (Number.isNaN(teaid)) {
+    if (typeof teaid === 'undefined') {
       return res.redirect('/')
     }
 
@@ -23,11 +23,29 @@ module.exports = (models) => {
     }
 
     // Adatbázis művelet.
+    const { teaModel } = models
 
+    // Létezik ilyen egyed?
+    teaModel.findOne(
+      { "_id": teaid },
+      (err, tea) => {
+        if (err | !tea) {
 
-    // 
-    console.log(`Módosított tea: ${ teaid }`)
-    console.log('***********')
+          return
+        }
+      }
+    )
+
+    teaModel.update(
+      { "_id": teaid}, 
+      { $set: { "name": req.body.tea_name}}, 
+      (err) => {
+        if (err) {
+          console.log(err)
+        }
+      }
+    )
+    
     return res.redirect('/tea/all')
   }
 }

@@ -33,13 +33,20 @@ module.exports = (models) => {
 
       return acc
     },[])
+
+    const { seansModel } = models
+
+    const newSeans = new seansModel()
+    newSeans.date   = req.body.date
+    newSeans._owner = req.session.usertoken
+    newSeans._teas  = teaIds
    
-    // Adatbázis mentés.
-    console.log('Új szeánsz felvéve, teák: ')
-    teaIds.forEach((teaId) => {
-      console.log(`Tea azonosító: ${ teaId }`)
+ 
+    newSeans.save((err) => {
+      if (err) {
+        console.log(err)
+      }
     })
-    console.log('***********')
 
     res.redirect('/seans/all')
   }

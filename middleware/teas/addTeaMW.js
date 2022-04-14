@@ -16,7 +16,7 @@ module.exports = (models) => {
 
     const currentDate = new Date()
 
-    const month = currentDate.getMonth + 1
+    const month = currentDate.getMonth() + 1
     const monthStr = month < 10 ? `0${ month }` : month
     const createdAt = `${ currentDate.getFullYear() }-${ monthStr }-${ currentDate.getDate() }`
 

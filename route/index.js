@@ -192,7 +192,7 @@ module.exports = (app) => {
   app.get(
     '/tea/:teaid/delete',
     auth(),
-    deleteTea(),
+    deleteTea(models),
   )
 
   /* API CALLS */
