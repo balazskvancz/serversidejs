@@ -2,30 +2,20 @@ const res = require("express/lib/response")
 
 /**
  * Megjeleníti az összes teát.
+ * @param {Object} models Adatbázis modelleket tartalmazó object.
  */
-module.exports = () => {
-  return function (req, res, next) {
+module.exports = (models) => {
+  return function (_req, res, next) {
 
-    // Mock Adat.
-    const teas = [
-      {
-        id: 1, 
-        createdAt: '2022-03-01',
-        name: 'Yiwu GuShu #1'
-      },
-      {
-        id: 2, 
-        createdAt: '2022-03-04',
-        name: 'DaXueShan 2019'
-      },
-      {
-        id: 3, 
-        createdAt: '2022-04-01',
-        name: 'Milky Oolong'
+    const { teaModel } = models
+
+    teaModel.find({"deleted": 0}, (err, allTeas) => {
+      if (err) {
+        return
       }
-    ]
 
-    res.locals.teas = teas
-    next()
+      res.locals.teas = allTeas
+      return next()
+    }) 
   }
 }

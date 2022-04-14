@@ -1,7 +1,8 @@
 /**
  * Felvesz egy új teát.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
+module.exports = (models) => {
   return function(req, res, next) {
     // Egyelőre basic validáció.
     if (
@@ -13,13 +14,44 @@ module.exports = () => {
       return next()
     }
 
-    // Itt megtörténik a név duplikációra való adatbázis keresés.
+    const currentDate = new Date()
 
-    // Itt beszúrjuk az adatbázisba.
+    const month = currentDate.getMonth + 1
+    const monthStr = month < 10 ? `0${ month }` : month
+    const createdAt = `${ currentDate.getFullYear() }-${ monthStr }-${ currentDate.getDate() }`
 
-    console.log('Sikeres teafelvétel.')
-    console.log('***********')
+    const { teaModel } = models
 
+    teaModel.findOne(
+      {
+        "name": req.body.tea_name,
+      }, 
+      (err, tea) => {
+
+        if (err) {
+          console.log(err)
+        }
+
+        if (tea) {
+          console.log('Már van ilyen tea.!')
+
+          return
+        }
+      }
+    )
+
+    const newTea = new teaModel()
+
+    newTea.name = req.body.tea_name
+    newTea.createdAt = createdAt
+
+    newTea.save((err) => {
+      if (err) {
+        console.log(err)
+      }
+    })
+
+    
     return res.redirect('/tea/all')
   }
 }

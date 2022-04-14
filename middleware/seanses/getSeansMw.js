@@ -1,7 +1,8 @@
 /**
  * Megjelenít egy adott szeánsz-t.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
+module.exports = (models) => {
   return function(req, res, next) {
 
     const seansId = req.params.seansid

@@ -1,7 +1,8 @@
 /**
  * Bejelentkezés.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
+module.exports = (models) => {
   return function(req, res, next) {
     // Egyelőre, annyit csinálunk, hogy ha nem 
     // ad meg semmit a felashználó, akkor error.
@@ -16,10 +17,26 @@ module.exports = () => {
       return next()
     }
 
-    // Beállítjuk a usertokent a megadott user-name.
-    req.session.usertoken = req.body.username
-    req.session.save()
-  
-    return res.redirect('/seans/all')
+    const { userModel } = models
+
+    userModel.findOne(
+      {
+        name: req.body.username, 
+        password: req.body.password
+      },
+      (err, user) => {
+        if (err || !user) {
+          console.log('Nincs ilyen!') 
+
+          next() 
+          return
+        }
+
+        req.session.usertoken = user._id
+        req.session.save()
+
+        return res.redirect('/seans/all')
+      }
+    )
   }
 }

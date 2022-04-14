@@ -5,8 +5,8 @@ module.exports = () => {
   return function (req, res, _next) {
     const { teaid } = req.params
     
-    if (Number.isNaN(teaid)) {
-
+    if (typeof teaid === 'undefined') {
+      return
     }
 
     // Töröltté tesszük.

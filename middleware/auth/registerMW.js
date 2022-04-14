@@ -1,7 +1,8 @@
 /**
  * Regisztráció.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
+module.exports = (models) => {
   return function(req, res, next) {
     // Szimpla validáció.
     const fields = [
@@ -28,7 +29,19 @@ module.exports = () => {
     }
     
 
-    // Adatbázis check már létező név-re.
+    const { userModel } = models
+
+    const newUser = new userModel()
+
+    newUser.name     = req.body.username
+    newUser.password = req.body.password
+
+    newUser.save((err) => {
+      if (err) {
+        // Itt valami hibakezelés.
+      }
+
+    })
 
     // Adatbázis mentés.
     console.log('Sikeres resgisztráció.')

@@ -1,7 +1,8 @@
 /**
  * Módosít egy adott teát.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
+module.exports = (models) => {
   return function(req, res, next) {
     // Kivesszük a tea azonosítóját.
     const { teaid } = req.params

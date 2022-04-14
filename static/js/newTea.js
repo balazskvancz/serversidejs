@@ -1,10 +1,6 @@
 "use strict"
 
-const mockTeas = [
-  {id: 1, name: 'Yiwu #1'},
-  {id: 2, name: 'DaXueShan'},
-  {id: 3, name: 'Milky OOlong'}
-]
+let allTeas = []
 
 /**
  * Generáltat egy teljesen random azonosítót.
@@ -56,10 +52,10 @@ const addNewTeaForm = () => {
   teaSelection.name = getRandomId('tea-')
 
   // Feltöltjük adatokkal.
-  mockTeas.forEach((tea) => {
+  allTeas.forEach((tea) => {
     const option = document.createElement('option')
 
-    option.value     = tea.id
+    option.value     = tea._id
     option.innerText = tea.name
 
     teaSelection.appendChild(option)
@@ -112,6 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!newTeaBtn) {
     return
   }
+
+  // Lekérdezzük az összes teét api végpontról.
+  fetch('/api/tea/all')
+    .then(response => response.json())
+    .then((data) => {
+      allTeas = data
+    })
 
   // Feliratkozunk az eseményekelőre.
   newTeaBtn.addEventListener('click', addNewTeaForm)

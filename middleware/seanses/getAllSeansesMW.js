@@ -1,9 +1,10 @@
 
 /**
  * Megjeleníti az összes felvett szeánszot.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
-  return function (req, res, next) {
+module.exports = (models) => {
+  return function (_req, res, next) {
 
     const seanses = [
       { seansId: 1, 

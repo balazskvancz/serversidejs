@@ -1,23 +1,28 @@
 /**
  * Megjelenít egy adott teát.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
+module.exports = (models) => {
   return function (req, res, next) {
     const { teaid } = req.params
 
     // Ha nem szám a teaid.
-    if (Number.isNaN(teaid)) {
-
+    if (typeof teaid === 'undefined') {
+      return 
     }
 
-    // Mock Adat.
-    const tea = {
-      id: teaid,
-      name: 'Yiwu GuShu'
-    }
+    const { teaModel } = models
 
-    res.locals.tea = tea
+    teaModel.findOne({
+      "_id": teaid
+    }, (err, tea) => {
+      if (err) {
+        console.log(err)
+      }
 
-    return next()
+      res.locals.tea = tea
+      console.log(tea)
+      return next()
+    })
   }
 }

@@ -1,7 +1,8 @@
 /**
  * Felvesz egy új szeánsz-t.
+ * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
-module.exports = () => {
+module.exports = (models) => {
   const TEA_FIELD_PREFIX = 'tea-'
 
   return function(req, res, next) {

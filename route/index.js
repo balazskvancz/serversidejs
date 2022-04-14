@@ -11,11 +11,22 @@ const getSeans        = require('../middleware/seanses/getSeansMw')
 
 const addTea          = require('../middleware/teas/addTeaMW')
 const allTeas         = require('../middleware/teas/getAllTeasMW')
+const allTeaApi       = require('../middleware/teas/getAllTeaApiMW')
 const deleteTea       = require('../middleware/teas/deleteTeaMW')
 const editTea         = require('../middleware/teas/editTeaMW')
 const getTea          = require('../middleware/teas/getTeaMW')
 
 const renderMW        = require('../middleware/renderMW')
+
+const teaModel        = require('../models/tea')
+const seansModel      = require('../models/seans')
+const userModel       = require('../models/user')
+
+const models = {
+  teaModel, 
+  seansModel,
+  userModel 
+}
 
 module.exports = (app) => {
 
@@ -32,7 +43,7 @@ module.exports = (app) => {
    */
   app.post(
     '/register',
-    register(),
+    register(models),
     renderMW('register')
   )
 
@@ -49,7 +60,7 @@ module.exports = (app) => {
    */
   app.post(
     '/login',
-    login(),
+    login(models),
     renderMW('login')
   )
 
@@ -70,7 +81,7 @@ module.exports = (app) => {
   app.get(
     '/seans/all',
     auth(),
-    allSeanses(),
+    allSeanses(models),
     renderMW('allSeanses')
   );
 
@@ -89,7 +100,7 @@ module.exports = (app) => {
   app.post(
     '/seans/new',
     auth(),
-    addSeans(),
+    addSeans(models),
     renderMW('newSeans')
   )
 
@@ -99,7 +110,7 @@ module.exports = (app) => {
   app.get(
     '/seans/:seansid/edit',
     auth(),
-    getSeans(),
+    getSeans(models),
     renderMW('editSeans')
   )
 
@@ -110,7 +121,7 @@ module.exports = (app) => {
   app.post(
     '/seans/:seansid/edit',
     auth(),
-    editSeans(),
+    editSeans(models),
   )
   
 
@@ -131,17 +142,8 @@ module.exports = (app) => {
   app.get(
     '/tea/all',
     auth(),
-    allTeas(),
+    allTeas(models),
     renderMW('allTeas')
-  )
-
-  /**
-   * Megjeleníti egy adott tea adatait.
-   */
-  app.get(
-    '/tea/:teaid',
-    auth(),
-    getTea(),
   )
 
   /**
@@ -159,7 +161,7 @@ module.exports = (app) => {
   app.post(
     '/tea/new',
     auth(),
-    addTea(),
+    addTea(models),
     renderMW('newTea')
   )
 
@@ -169,7 +171,7 @@ module.exports = (app) => {
   app.get(
     '/tea/:teaid/edit',
     auth(),
-    getTea(),
+    getTea(models),
     renderMW('editTea')
   )
 
@@ -179,8 +181,8 @@ module.exports = (app) => {
   app.post(
     '/tea/:teaid/edit',
     auth(),
-    editTea(),
-    getTea(),
+    editTea(models),
+    getTea(models),
     renderMW('editTea')
   )
 
@@ -191,5 +193,11 @@ module.exports = (app) => {
     '/tea/:teaid/delete',
     auth(),
     deleteTea(),
+  )
+
+  /* API CALLS */
+  app.get(
+    '/api/tea/all',
+    allTeaApi(models)
   )
 }
