@@ -7,25 +7,12 @@ module.exports = (models) => {
     const { teaid } = req.params
     const { teaModel } = models
 
-    if (typeof teaid === 'undefined') {
-      return
-    }
-
-    const query = { "_id": teaid }
-
-    // Van ilyen tea?
-    teaModel.find(query, (err, tea) => {
-      if (err | !tea) {
-        return
-      }
-    })
-
     teaModel.update(
-      query, 
-      { $set: { "deleted": 1 }}, 
+       { '_id': teaid }, 
+      { $set: { 'deleted': 1 }}, 
       (err) => {
         if (err) {
-          console.log(err)
+          return res.status(500).send('Ismeretlen hiba.')
         }
       })
 

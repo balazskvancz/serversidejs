@@ -5,19 +5,14 @@
 module.exports = (models) => {
   const TEA_FIELD_PREFIX = 'tea-'
   
-  return function(req, res, next) {
+  return function(req, res, _next) {
+    const { seansid }    = req.params
+    const { seansModel } = models
+    if ( typeof seansid === 'undefined') {
+      res.status(404).send('Nem található szeánsz.')
 
-    const { seansid } = req.params
-
-    // Ha nem szám megadott seánsz azonosító,
-    // akkor legyen 404
-    if (Number.isNaN(seansid)) {
-      
-
+      return
     }
-
-    // Lecheckoljuk, hogy létezik e egyáltalán ilyen szeánsz.
-
 
     // Hozzáaadjuk az összes újonann felvett teát.
     const fields = Object.keys(req.body)
@@ -30,7 +25,7 @@ module.exports = (models) => {
       
       const teaId = req.body[curr]
 
-      if (Number.isNaN(teaId)) {
+      if (typeof teaId === 'undefined') {
         return acc
       }
 
@@ -39,14 +34,30 @@ module.exports = (models) => {
       return acc
     }, [])
 
-    // Mentjük adatbázisba az újonann felvett teákat.
-
-    console.log(`Módosított szeánsz: ${ seansid }, új teák: `)
-    teaIds.forEach((teaId) => {
-      console.log(`Tea azonosító: ${ teaId }`)
+    // Jelenlegi teák.
+    const currentlyAttachedTeas = res.locals.seans._teas.map((oId) => {
+      return oId.toString()
     })
-    console.log('***********')
-   
-    res.redirect('/seans/all')
+
+    // Jelenlegi és újonnan hozzáadott teák halmaza.
+    const newAttachedTeas = Array.from(
+      new Set([...currentlyAttachedTeas, ...teaIds])
+    )
+
+    seansModel.update(
+      { _id: seansid}, 
+      { $set: { _teas: newAttachedTeas}},
+      (err) => {
+        if (err) {
+          console.log(err)
+        }
+
+        res.redirect('/seans/all')
+      }
+    )
+    
+
+    
+           
   }
 }

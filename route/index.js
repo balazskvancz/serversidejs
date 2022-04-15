@@ -7,7 +7,8 @@ const addSeans        = require('../middleware/seanses/addSeansMW')
 const allSeanses      = require('../middleware/seanses/getAllSeansesMW')
 const deleteSeans     = require('../middleware/seanses/deleteSeansMW')
 const editSeans       = require('../middleware/seanses/editSeansMW')
-const getSeans        = require('../middleware/seanses/getSeansMw')
+const getSeans        = require('../middleware/seanses/getSeansMW')
+const removeTeaSeans  = require('../middleware/seanses/removeTeaMW')
 
 const addTea          = require('../middleware/teas/addTeaMW')
 const allTeas         = require('../middleware/teas/getAllTeasMW')
@@ -121,6 +122,7 @@ module.exports = (app) => {
   app.post(
     '/seans/:seansid/edit',
     auth(),
+    getSeans(models),
     editSeans(models),
   )
   
@@ -131,7 +133,19 @@ module.exports = (app) => {
   app.get(
     '/seans/:seansid/delete',
     auth(),
-    deleteSeans(),
+    getSeans(models),
+    deleteSeans(models),
+  )
+
+  /**
+   * Töröl egy szeánszhoz rendelt teát.
+   */
+  app.get(
+    '/seans/:seansid/tea/:teaid/delete',
+    auth(), 
+    getSeans(models), 
+    removeTeaSeans(models),
+    renderMW('editSeans')
   )
 
   /* TEÁK */
@@ -181,8 +195,8 @@ module.exports = (app) => {
   app.post(
     '/tea/:teaid/edit',
     auth(),
-    editTea(models),
     getTea(models),
+    editTea(models),
     renderMW('editTea')
   )
 
@@ -192,6 +206,7 @@ module.exports = (app) => {
   app.get(
     '/tea/:teaid/delete',
     auth(),
+    getTea(models),
     deleteTea(models),
   )
 

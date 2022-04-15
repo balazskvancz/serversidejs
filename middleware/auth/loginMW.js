@@ -26,10 +26,9 @@ module.exports = (models) => {
       },
       (err, user) => {
         if (err || !user) {
-          console.log('Nincs ilyen!') 
+          res.locals.error = 'Sikertelen bejelentkezés.'
 
-          next() 
-          return
+          return next() 
         }
 
         req.session.usertoken = user._id

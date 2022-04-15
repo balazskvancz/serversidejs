@@ -12,8 +12,6 @@
       <div class="card-body">
         <div class="row">
           <div class="col-sm-12 text-center">
-
-            <h2 class="p-2">Azonosító: <%= seans._id%></h2>
             <h2 class="p-2">Dátum: <%= seans.date %></h2>
 
             <hr class="my-3">
@@ -34,15 +32,17 @@
                 </thead>
 
                 <tbody>
-                  <% seans._teas.forEach((tea) => { %>
+                  <% seans.teas.forEach((tea) => { %>
                     <tr>
-                      <td class="text-center align-middle"><%= tea%></td>
-                      <td class="text-center align-middle">
-                        <i class="bi bi-trash display-6"></i>
+                      <td class="text-center align-middle"><%= tea.name %></td>
+                      <td class="text-center">
+                        <a href="/seans/<%= seans._id%>/tea/<%= tea._id %>/delete" class="text-dark">
+                          <i class="bi bi-trash m-2 display-6"></i>
+                        </a>
                       </td>
-                    </tr> 
+                    </tr>
+                    
                   <% }) %>
-
                 </tbody>
               </table>
             </div>

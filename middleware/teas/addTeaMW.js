@@ -24,21 +24,18 @@ module.exports = (models) => {
 
     teaModel.findOne(
       {
-        "name": req.body.tea_name,
+        'name': req.body.tea_name,
       }, 
-      (err, tea) => {
-
-        if (err) {
-          console.log(err)
-        }
-
+      (_err, tea) => {
         if (tea) {
-          console.log('Már van ilyen tea.!')
+          res.locals.error = 'Ilyen névvel már létezik tea.' 
 
-          return
+          return next()
         }
-      }
-    )
+       }
+      )
+
+    
 
     const newTea = new teaModel()
 
@@ -47,7 +44,7 @@ module.exports = (models) => {
 
     newTea.save((err) => {
       if (err) {
-        console.log(err)
+        return res.status(500).send('Ismeretlen hiba.')
       }
     })
 

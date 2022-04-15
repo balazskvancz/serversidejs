@@ -3,8 +3,6 @@
     "port": 8000
   },
   "db": {
-    "name": "root",
-    "password": "root",
     "dbname": "seans_manager",
     "port": 27017,
     "host": "localhost"

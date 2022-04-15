@@ -12,7 +12,6 @@ module.exports = (models) => {
     ]
 
     fields.forEach((field) => {
-      console.log(typeof req.body[field])
       if (typeof req.body[field] === 'undefined' ||
           req.body[field].length === 0 ){
         res.locals.error = 'Az összes mező kitöltése kötelező.'
@@ -27,10 +26,10 @@ module.exports = (models) => {
 
       return next()
     }
-    
 
     const { userModel } = models
 
+    // Létrehozzuk, az új egyedet.
     const newUser = new userModel()
 
     newUser.name     = req.body.username
@@ -38,13 +37,13 @@ module.exports = (models) => {
 
     newUser.save((err) => {
       if (err) {
-        // Itt valami hibakezelés.
+        res.locals.error = 'Hiba történt. Próbálja újra.'
+
+        return next() 
       }
 
     })
 
-    // Adatbázis mentés.
-    console.log('Sikeres resgisztráció.')
 
     return res.redirect('/')
   }

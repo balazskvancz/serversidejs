@@ -44,7 +44,7 @@ module.exports = (models) => {
  
     newSeans.save((err) => {
       if (err) {
-        console.log(err)
+        return res.status(500).send('Ismeretlen hiba.')
       }
     })
 

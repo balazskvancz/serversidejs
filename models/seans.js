@@ -5,8 +5,12 @@ const seansModel = db.model('seanses', {
   date: {
     type: String
   },
+  deleted: {
+    type: Number, 
+    default: 0
+  },
   _teas: {
-      type: [db.Schema.Types.ObjectId],
+      type: [ db.Schema.Types.ObjectId ],
       ref: 'teas'
     },
   _owner: {

@@ -1,5 +1,3 @@
-const res = require("express/lib/response")
-
 /**
  * Megjeleníti az összes teát.
  * @param {Object} models Adatbázis modelleket tartalmazó object.
@@ -9,7 +7,7 @@ module.exports = (models) => {
 
     const { teaModel } = models
 
-    teaModel.find({"deleted": 0}, (err, allTeas) => {
+    teaModel.find({'deleted': 0}, (err, allTeas) => {
       if (err) {
         return
       }

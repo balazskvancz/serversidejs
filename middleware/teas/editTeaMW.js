@@ -25,23 +25,12 @@ module.exports = (models) => {
     // Adatbázis művelet.
     const { teaModel } = models
 
-    // Létezik ilyen egyed?
-    teaModel.findOne(
-      { "_id": teaid },
-      (err, tea) => {
-        if (err | !tea) {
-
-          return
-        }
-      }
-    )
-
     teaModel.update(
-      { "_id": teaid}, 
-      { $set: { "name": req.body.tea_name}}, 
+      { '_id': teaid}, 
+      { $set: { 'name': req.body.tea_name}}, 
       (err) => {
         if (err) {
-          console.log(err)
+          return res.status(500).send('Ismeretlen hiba.')
         }
       }
     )

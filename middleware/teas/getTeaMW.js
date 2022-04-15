@@ -14,14 +14,14 @@ module.exports = (models) => {
     const { teaModel } = models
 
     teaModel.findOne({
-      "_id": teaid
+      '_id': teaid
     }, (err, tea) => {
-      if (err) {
-        console.log(err)
+      if (err || !tea) {
+        return res.status(404).send('Nem taláható a tea.')
       }
 
       res.locals.tea = tea
-      console.log(tea)
+      
       return next()
     })
   }
