@@ -3,9 +3,7 @@
  * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
 module.exports = (models) => {
-  return function(req, res, next) {
-    // Egyelőre, annyit csinálunk, hogy ha nem 
-    // ad meg semmit a felashználó, akkor error.
+  return async function(req, res, next) {
     if (
       typeof req.body.username !== 'string' || 
       typeof req.body.password !== 'string' || 
@@ -19,23 +17,27 @@ module.exports = (models) => {
 
     const { userModel } = models
 
-    userModel.findOne(
-      {
-        name: req.body.username, 
-        password: req.body.password
-      },
-      (err, user) => {
-        if (err || !user) {
-          res.locals.error = 'Sikertelen bejelentkezés.'
+    try {
+      await userModel.findOne(
+        {
+          name: req.body.username, 
+          password: req.body.password
+        }).then((response) => {
+          if (!response) {
+            res.locals.error = 'Sikertelen bejelentkezés.'
+            return next() 
+          }
 
-          return next() 
-        }
+          req.session.usertoken = response._id
+          req.session.save()
 
-        req.session.usertoken = user._id
-        req.session.save()
+          return res.redirect('/seans/all')
+        })
+    } catch(err) {
+      console.log(err)
+      res.locals.error = 'Sikertelen bejelentkezés.'
 
-        return res.redirect('/seans/all')
-      }
-    )
+      return next()
+    }
   }
 }

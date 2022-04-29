@@ -3,7 +3,7 @@
  * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
 module.exports = (models) => {
-  return function(req, res, next) {
+  return async function(req, res, next) {
     // Kivesszük a tea azonosítóját.
     const { teaid } = req.params
 
@@ -25,16 +25,17 @@ module.exports = (models) => {
     // Adatbázis művelet.
     const { teaModel } = models
 
-    teaModel.update(
+    try {
+      await teaModel.update(
       { '_id': teaid}, 
-      { $set: { 'name': req.body.tea_name}}, 
-      (err) => {
-        if (err) {
-          return res.status(500).send('Ismeretlen hiba.')
-        }
-      }
-    )
-    
+      { $set: { 'name': req.body.tea_name}})
+
+    } catch(err) {
+      console.log(err)
+
+      return res.status(500).send('Ismeretlen hiba.')
+    }
+              
     return res.redirect('/tea/all')
   }
 }

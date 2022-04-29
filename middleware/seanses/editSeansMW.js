@@ -5,7 +5,7 @@
 module.exports = (models) => {
   const TEA_FIELD_PREFIX = 'tea-'
   
-  return function(req, res, _next) {
+  return async function(req, res, _next) {
     const { seansid }    = req.params
     const { seansModel } = models
     if ( typeof seansid === 'undefined') {
@@ -44,20 +44,16 @@ module.exports = (models) => {
       new Set([...currentlyAttachedTeas, ...teaIds])
     )
 
-    seansModel.update(
-      { _id: seansid}, 
-      { $set: { _teas: newAttachedTeas}},
-      (err) => {
-        if (err) {
-          console.log(err)
-        }
+    try {
+      await seansModel.update(
+        { _id: seansid}, 
+        { $set: { _teas: newAttachedTeas}})
+    } catch(err) {
+      console.log(err)
 
-        res.redirect('/seans/all')
-      }
-    )
-    
+      return res.status(500).send('Ismeretlen hiba.')
+    }
 
-    
-           
+    res.redirect('/seans/all')
   }
 }

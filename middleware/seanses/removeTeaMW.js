@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
  * @returns 
  */
 module.exports = (models) => {
-  return function (req, res, next) {
+  return async function (req, res, _next) {
     const { seansModel } = models
     const { seansid, teaid } = req.params
 
@@ -21,20 +21,18 @@ module.exports = (models) => {
       return teaIds.toString() != teaid
     })
 
-    seansModel.update(
-      { _id: seansid}, 
-      { $set: { _teas: newTeasArray}}, 
-      (err, val) => {
-        // Hiba,
-        if (err) {
-          console.log(err)
-        }
+    try {
+      await seansModel.update(
+        { _id: seansid}, 
+        { $set: { _teas: newTeasArray}}) 
+    } catch (err) {
+      console.log(err)
 
-        // Ekkor minden ok!
-        const url = `/seans/${ seansid }/edit`
-        return res.redirect(url)
-      }
-    )
-     
+      return res.status(500).send('Ismeretlen hiba.')
+    }
+
+    // Ha ide eljutunk, akkor sikeres volt.
+    const url = `/seans/${ seansid }/edit`
+    return res.redirect(url)
   }
 }

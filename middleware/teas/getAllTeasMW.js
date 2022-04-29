@@ -3,17 +3,19 @@
  * @param {Object} models Adatbázis modelleket tartalmazó object.
  */
 module.exports = (models) => {
-  return function (_req, res, next) {
+  return async function (_req, res, next) {
 
     const { teaModel } = models
 
-    teaModel.find({'deleted': 0}, (err, allTeas) => {
-      if (err) {
-        return
-      }
+    try {
+      await teaModel.find({'deleted': 0})
+      .then((teas) => {
+        res.locals.teas = teas
 
-      res.locals.teas = allTeas
-      return next()
-    }) 
+        return next()
+      })
+    } catch(err) {
+      return res.status(500).send('Ismeretlen hiba.')
+    }
   }
 }

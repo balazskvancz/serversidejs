@@ -4,18 +4,19 @@
  * @returns {[]} Teák.
  */
 module.exports = (models) => {
-  return function(_req, res, _next) {
+  return async function(_req, res, _next) {
     const { teaModel } = models
     
-    teaModel.find({ 'deleted': 0}, (err, teas) => {
-      if (err || !teas) {
-        res.send([])
-      } 
-      
-      if (teas) {
+    try {
+      await teaModel.find({ 'deleted': 0})
+      .then((teas) => {
         res.send(JSON.stringify(teas))
-      }
-    })
+      })
+    } catch(err) {
+      console.log(err)
+
+      res.send(JSON.stringify([])) 
+    }
   } 
 }
 

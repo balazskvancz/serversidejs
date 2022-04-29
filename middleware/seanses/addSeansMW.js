@@ -5,7 +5,7 @@
 module.exports = (models) => {
   const TEA_FIELD_PREFIX = 'tea-'
 
-  return function(req, res, next) {
+  return async function(req, res, next) {
     // Egyszerűen csak dátumra vizsgálunk.
     if (typeof req.body.date !== 'string' || req.body.date.length === 0) {
       res.locals.error = 'Nincs dátum megadva.'
@@ -40,13 +40,15 @@ module.exports = (models) => {
     newSeans.date   = req.body.date
     newSeans._owner = req.session.usertoken
     newSeans._teas  = teaIds
-   
- 
-    newSeans.save((err) => {
-      if (err) {
-        return res.status(500).send('Ismeretlen hiba.')
-      }
-    })
+
+    try {
+     await newSeans.save()
+    } catch (err) {
+      console.log(err)
+      res.locals.error = 'Mentési hiba.'
+
+      return next()
+    }
 
     res.redirect('/seans/all')
   }

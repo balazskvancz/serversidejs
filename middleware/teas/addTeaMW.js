@@ -3,7 +3,7 @@
  * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
 module.exports = (models) => {
-  return function(req, res, next) {
+  return async function(req, res, next) {
     // Egyelőre basic validáció.
     if (
       typeof req.body.tea_name !== 'string' || 
@@ -22,19 +22,25 @@ module.exports = (models) => {
 
     const { teaModel } = models
 
-    teaModel.findOne(
-      {
-        'name': req.body.tea_name,
-      }, 
-      (_err, tea) => {
-        if (tea) {
-          res.locals.error = 'Ilyen névvel már létezik tea.' 
+    let alreadyExits = false
 
-          return next()
-        }
-       }
-      )
+    try {
+      await teaModel.findOne(
+        { 'name': req.body.tea_name }
+      ).then((response) => {
+        alreadyExits = response ? true : false
+      })
+    }catch (err) {
+      console.log(err)  
+      res.locals.error = 'Adatbázis hiba.'
+      return next()
+    }
+   
+    if (alreadyExits) {
+      res.locals.error = 'Ilyen névvel már létezik tea.'
 
+      return next()
+    }
     
 
     const newTea = new teaModel()
@@ -42,12 +48,14 @@ module.exports = (models) => {
     newTea.name = req.body.tea_name
     newTea.createdAt = createdAt
 
-    newTea.save((err) => {
-      if (err) {
-        return res.status(500).send('Ismeretlen hiba.')
-      }
-    })
+    try {
+      await newTea.save()
+    }catch (err) {
+      console.log(err)
 
+      res.locals.error = 'Adatbázis hiba.'
+      return next()
+    }
     
     return res.redirect('/tea/all')
   }

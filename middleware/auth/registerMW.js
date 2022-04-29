@@ -3,7 +3,7 @@
  * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
 module.exports = (models) => {
-  return function(req, res, next) {
+  return async function(req, res, next) {
     // Szimpla validáció.
     const fields = [
       'username',
@@ -29,22 +29,57 @@ module.exports = (models) => {
 
     const { userModel } = models
 
+    let alreadyExits = false
+
+    await userModel.findOne(
+      {'name': req.body.username}
+    ).then((result) => {
+      alreadyExits = result ? true : false 
+    })
+
+
+    if (alreadyExits) {
+      res.locals.error = 'Ilyen nevű felhasználó már létezik.'
+
+      return next()
+    }
+    
+    
     // Létrehozzuk, az új egyedet.
     const newUser = new userModel()
 
     newUser.name     = req.body.username
     newUser.password = req.body.password
 
-    newUser.save((err) => {
-      if (err) {
-        res.locals.error = 'Hiba történt. Próbálja újra.'
+    try {
+      await newUser.save()
+    } catch (err) {
+      console.log(err)
 
-        return next() 
-      }
+      res.locals.error = 'Hiba történt. Próbálja újra.'
+      return next()
+    }
 
-    })
-
-
+    // Ha nem volt hiba, akkor átirányítás.
     return res.redirect('/')
   }
+}
+
+async function isUserExists(userModel, username) {
+  return new Promise((resolve, reject) => {
+    userModel.findOne({
+      'name': username
+    }, (err, user) => {
+      if (err) {
+        reject()  
+      }
+
+      // Ha van ilyen user.
+      if (user) {
+        resolve(true)
+      }
+    })
+
+    resolve(false)
+  })
 }

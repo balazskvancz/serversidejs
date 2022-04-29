@@ -3,7 +3,7 @@
  * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
 module.exports = (models) => {
-  return function (req, res, next) {
+  return async function (req, res, next) {
     const { teaid } = req.params
 
     // Ha nem szám a teaid.
@@ -13,16 +13,18 @@ module.exports = (models) => {
 
     const { teaModel } = models
 
-    teaModel.findOne({
-      '_id': teaid
-    }, (err, tea) => {
-      if (err || !tea) {
-        return res.status(404).send('Nem taláható a tea.')
-      }
+    try {
+      await teaModel.findOne({ '_id': teaid })
+      .then((tea) => {
+        res.locals.tea = tea
 
-      res.locals.tea = tea
-      
-      return next()
-    })
+        return next()
+      })
+    } catch(err) {
+      console.log(err) 
+
+      res.status(500).send('Ismeretlen hiba.')
+    }
+    
   }
 }

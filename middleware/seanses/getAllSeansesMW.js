@@ -7,8 +7,8 @@ module.exports = (models) => {
   return async function (req, res, next) {
     const { seansModel } = models
 
-    seansModel.aggregate([
-      { $match: {
+    try {
+      seansModel.aggregate([{ $match: {
         $and: [
           { "deleted": 0 },
           { "_owner": ObjectId(req.session.usertoken)} 
@@ -19,17 +19,19 @@ module.exports = (models) => {
         localField: "_teas", 
         foreignField: "_id",
         as: "teas"
-      }}
-    ], 
-    (err, seanses) => {
-      if (err) {
-        return res.status(500).send('Ismeretlen hiba.')
+      }},
+      {
+        $sort: {
+          date: -1
+        }
       }
+      ]).then((response) => {
+        res.locals.seanses = response
 
-      res.locals.seanses = seanses
-
-      next()
- 
-    })
+        return next()
+      })
+    }catch(err) {
+      return res.status(500).send('Ismeretlen hiba.')
+    }
   }
 }
