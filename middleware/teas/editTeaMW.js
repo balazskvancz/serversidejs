@@ -45,12 +45,17 @@ module.exports = (models) => {
 
     // Mielőtt updateljük, meg kell vizsgálni, hogy nem lesz e névütközés.
     let isOkToUpdate = true 
+    let isTeaSameTea = false
+
     try {
       await teaModel.findOne(
         { 'name': req.body.tea_name }
       ).then((nameQueryTea) => {
         // Ha már van ilyen tea, akkor nem szabad ilyenre updatelni.
         isOkToUpdate = nameQueryTea ? false : true 
+        if (nameQueryTea) {
+          isTeaSameTea = String(nameQueryTea._id) === String(existingTea._id)
+        }
       })
     } catch(err) {
       console.log(err)
@@ -58,8 +63,16 @@ module.exports = (models) => {
       return res.status(500).send('Ismeretlen hiba.')
     }
 
+    // Ide bele fog futni, ha névütközés miatt nem lehet nevet módosítani.
     if (!isOkToUpdate) {
-      res.locals.error = 'Ilyen névvel már létezik tea.'
+      // Le kell vizsgálni, az error szövege miatt, hogy ez azért
+      // van e mert a felhasználó úgy kattintott a mentésre, 
+      // hogy semmit nem változtatott.
+      if (isTeaSameTea) {
+        res.locals.error = 'A tea neve nem változott.'
+      }else {
+        res.locals.error = 'Ilyen névvel már létezik tea.'
+      }
 
       return next()
     }
