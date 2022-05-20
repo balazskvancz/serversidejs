@@ -26,9 +26,7 @@ module.exports = (models) => {
       })
     } catch(err) {
       // console.log(err) 
-
-      res.status(500).send('Ismeretlen hiba.')
+      return res.status(500).send('Ismeretlen hiba.')
     }
-    
   }
 }

@@ -5,7 +5,7 @@ const mockSeansModel = {}
 
 describe('addSeansMW', () => {
 
-  it('A middlware hibát állít be, ha nincs date megadva', async () => {
+  it('A ha request body üres', async () => {
     const mw = addSeansMW(mockSeansModel)
     const mockResponse = { locals: {}}
     const mockRequest = { body: {}}
@@ -67,6 +67,5 @@ describe('addSeansMW', () => {
     mw(mockRequest, mockResponse, () => {
       expect(mockResponse.locals.error).to.be.undefined
     }) 
-
   })
 })

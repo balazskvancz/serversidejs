@@ -34,7 +34,7 @@ module.exports = (models) => {
           return res.redirect('/seans/all')
         })
     } catch(err) {
-      console.log(err)
+      // console.log(err)
       res.locals.error = 'Sikertelen bejelentkezés.'
 
       return next()

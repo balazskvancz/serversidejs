@@ -1,5 +1,3 @@
-const mongoose = require('mongoose')
-
 /**
  * Töröl egy adott teát egy adott szeánszból.
  * @param {Object} models 

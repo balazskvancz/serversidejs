@@ -64,22 +64,3 @@ module.exports = (models) => {
     return res.redirect('/')
   }
 }
-
-async function isUserExists(userModel, username) {
-  return new Promise((resolve, reject) => {
-    userModel.findOne({
-      'name': username
-    }, (err, user) => {
-      if (err) {
-        reject()  
-      }
-
-      // Ha van ilyen user.
-      if (user) {
-        resolve(true)
-      }
-    })
-
-    resolve(false)
-  })
-}

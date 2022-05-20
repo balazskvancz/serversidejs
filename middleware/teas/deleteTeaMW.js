@@ -17,7 +17,6 @@ module.exports = (models) => {
       return res.status(500).send('Ismeretlen hiba.')
     }
 
-
     return res.redirect('/tea/all')
   }
 }

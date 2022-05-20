@@ -1,9 +1,10 @@
-const ObjectId = require('mongodb').ObjectId
+const mongoose = require('mongoose')
 /**
  * Megjeleníti az összes felvett szeánszot.
  * @param {Object} models Adatbázis modelleket tartalmzó object.
  */
 module.exports = (models) => {
+  
   return async function (req, res, next) {
     const { seansModel } = models
 
@@ -11,7 +12,7 @@ module.exports = (models) => {
       seansModel.aggregate([{ $match: {
         $and: [
           { "deleted": 0 },
-          { "_owner": ObjectId(req.session.usertoken)} 
+          { "_owner": new mongoose.Types.ObjectId(req.session.usertoken) } 
         ]
       }},
       { $lookup: {

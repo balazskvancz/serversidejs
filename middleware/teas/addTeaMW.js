@@ -4,7 +4,6 @@
  */
 module.exports = (models) => {
   return async function(req, res, next) {
-    // Egyelőre basic validáció.
     if (
       typeof req.body.tea_name !== 'string' || 
       req.body.tea_name.length === 0
@@ -22,13 +21,12 @@ module.exports = (models) => {
 
     const { teaModel } = models
 
-    let alreadyExits = false
-
+    let existingTea = null
     try {
       await teaModel.findOne(
         { 'name': req.body.tea_name }
-      ).then((response) => {
-        alreadyExits = response ? true : false
+      ).then((tea) => {
+        existingTea = tea
       })
     }catch (err) {
       console.log(err)  
@@ -36,12 +34,29 @@ module.exports = (models) => {
       return next()
     }
    
-    if (alreadyExits) {
-      res.locals.error = 'Ilyen névvel már létezik tea.'
+    // Ha létezik ilyen tea, akkor hibát kell dobnunk, kivéve,
+    // ha egy olyan tea nevét szeretnék felvenni, ami törölt.
+    // Abban az esetben egyszerűen csak vissza kell állítani.
+    if (existingTea) {
+      if (existingTea.deleted === 0) {
+        res.locals.error = 'Ilyen névvel már létezik tea.'
 
-      return next()
+        return next()
+      }
+
+      // UPDATE
+      try {
+        await teaModel.update(
+          { 'name': existingTea.name },
+          { $set: { 'deleted': 0 }})
+      }catch(err) {
+        console.log(err)
+
+        return res.status(500).send('Ismeretlen hiba.')
+      }
+
+      return res.redirect('/tea/all')
     }
-    
 
     const newTea = new teaModel()
 

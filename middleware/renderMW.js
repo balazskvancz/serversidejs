@@ -5,6 +5,6 @@
  */
 module.exports = function(viewName) {
   return function(_req, res) {
-    res.render(viewName);
-  };
+    res.render(viewName)
+  }
 }

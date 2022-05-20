@@ -25,20 +25,17 @@ module.exports = (models) => {
     // Adatbázis művelet.
     const { teaModel } = models
 
-    
-
     // Létezik ilyen tea?
-    let currentTea = {}
+    let existingTea = null 
     try {
       await teaModel.findOne(
         { '_id': teaid }
       ).then((tea) => {
         if (!tea) {
-        console.log('gec ide bejut')
           return res.redirect('/tea/all')
         }
 
-        currentTea = tea
+        existingTea = tea
       })
     } catch(err) {
       console.log(err)

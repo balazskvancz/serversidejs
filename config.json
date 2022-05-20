@@ -1,6 +1,6 @@
 {
   "http": {
-    "port": 8001
+    "port": 8000
   },
   "db": {
     "dbname": "seans_manager",
