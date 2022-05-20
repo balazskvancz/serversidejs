@@ -44,7 +44,6 @@ module.exports = (models) => {
     try {
      await newSeans.save()
     } catch (err) {
-      console.log(err)
       res.locals.error = 'Mentési hiba.'
 
       return next()

@@ -25,13 +25,16 @@ module.exports = (models) => {
     // Adatbázis művelet.
     const { teaModel } = models
 
+    
+
     // Létezik ilyen tea?
     let currentTea = {}
     try {
       await teaModel.findOne(
-        { '_id': teaid}
+        { '_id': teaid }
       ).then((tea) => {
         if (!tea) {
+        console.log('gec ide bejut')
           return res.redirect('/tea/all')
         }
 
@@ -40,7 +43,6 @@ module.exports = (models) => {
     } catch(err) {
       console.log(err)
 
-
       return res.status(500).send('Ismeretlen hiba.')
     }
 
@@ -48,10 +50,10 @@ module.exports = (models) => {
     let isOkToUpdate = true 
     try {
       await teaModel.findOne(
-        { '_name': req.body.tea_name }
-      ).then((tea) => {
+        { 'name': req.body.tea_name }
+      ).then((nameQueryTea) => {
         // Ha már van ilyen tea, akkor nem szabad ilyenre updatelni.
-        isOkToUpdate = tea ? false : true 
+        isOkToUpdate = nameQueryTea ? false : true 
       })
     } catch(err) {
       console.log(err)
@@ -69,7 +71,6 @@ module.exports = (models) => {
       await teaModel.update(
       { '_id': teaid}, 
       { $set: { 'name': req.body.tea_name}})
-
     } catch(err) {
       console.log(err)
 
